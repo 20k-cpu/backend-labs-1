@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  nginx-1:
+    image: nginx:1.29
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./php-app:/var/www
+    depends_on:
+      - php-app
+      - node-app
+      - python-app
+
+  php-app:
+    build: ./php-app
+    container_name: php-app
+    volumes:
+      - ./php-app:/var/www
+    expose:
+      - "9000"
+
+  node-app:
+    build: ./node-app
+    container_name: node-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./node-app:/var/www/node
+
+  python-app:
+    build: ./python-app
+    container_name: python-app
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./python-app:/var/www/python
